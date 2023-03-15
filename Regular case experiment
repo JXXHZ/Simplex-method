@@ -1,0 +1,344 @@
+import random
+def regular_experiment(n,k):
+    A= np.hstack((eye(n),eye(n)))
+    b= np.ones((n,1))
+    B= np.array(range(n+1,2*n+1))
+    N= np.array(range(1,n+1))
+    c= zeros(2*n,1)
+    c1=zeros(n,1)
+    random.seed(k)
+    for i in range(0,c1.shape[0]):
+        c1[i,0]=random.gauss(mu=0.0, sigma=1.0)
+    norm=((transpose(c1)*c1)**(1/2))[0]
+    for i in range(0,c1.shape[0]):
+        c[i,0]=c1[i,0]/norm    
+    for i in range(n,c.shape[0]):
+        c[i,0]=0
+    return Iteration_Experiment(c,A,b,B,N)
+    
+import time
+total_time=[]
+cost_ite=[]
+
+total_ite=0
+results=[]
+t0 = time.time()
+for i in range(1,5001):
+    results.append(regular_experiment(10,i))
+    total_ite=total_ite+regular_experiment(10,i)
+t1 = time.time() - t0
+total_time.append(t1)
+cost_ite.append(t1/total_ite)
+
+#total_ite=0
+#results2=[]
+#t0 = time.time()
+#for i in range(1,5001):
+#    results2.append(regular_experiment(20,i))
+#    total_ite=total_ite+regular_experiment(20,i)
+#t1 = time.time() - t0
+#total_time.append(t1)
+#cost_ite.append(t1/total_ite)
+
+#Similar code for all n as above
+
+n1=np.array([10,20,30,40,50,60,70,80,90,100])
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots(figsize=(14, 8))
+ax.set_xlabel('The dimension of the LP problem') 
+ax.set_ylabel('Average cost of iterations')
+ax.set_title('Average cost of iterations for different n')
+ax.plot(n1,cost_ite,color='b',marker='o')
+fig.tight_layout()  
+plt.show()
+
+import numpy as np
+x=np.linspace(1,5000,5000)
+y_1=np.linspace(5,5,5000)
+y_2=np.linspace(10,10,5000)
+y_3=np.linspace(15,15,5000)
+y_4=np.linspace(20,20,5000)
+y_5=np.linspace(25,25,5000)
+
+average_1=np.zeros((5000))
+average_2=np.zeros((5000))
+average_3=np.zeros((5000))
+average_4=np.zeros((5000))
+average_5=np.zeros((5000))
+for i in range(0,5000):
+    average_1[i]=np.average(results[0:(i+1)])
+    average_2[i]=np.average(results2[0:(i+1)])
+    average_3[i]=np.average(results3[0:(i+1)])
+    average_4[i]=np.average(results4[0:(i+1)]) 
+    average_5[i]=np.average(results5[0:(i+1)]) 
+    
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots(figsize=(15, 15))
+ax.plot(x, y_1,color='k')
+ax.plot(x, average_1, label='n=10')
+ax.plot(x, average_2, label='n=20')
+ax.plot(x, y_2,color='k')
+ax.plot(x, average_3, label='n=30')
+ax.plot(x, y_3,color='k')
+ax.plot(x, average_4, label='n=40')
+ax.plot(x, y_4,color='k')
+ax.plot(x, average_5, label='n=50')
+ax.plot(x, y_5,color='k',label='n/2')
+ax.set_xlabel('Number of experiments')  # Add an x-label to the axes.
+ax.set_ylabel('The averages')  # Add a y-label to the axes.
+ax.set_title("The behaviour of averages for different n")  # Add a title to the axes.
+ax.legend()
+plt.show()
+
+x1=np.linspace(1,1000,1000)
+y1=np.linspace(5,5,1000)
+y2=np.linspace(10,10,1000)
+y3=np.linspace(15,15,1000)
+y4=np.linspace(20,20,1000)
+y5=np.linspace(25,25,1000)
+y6=np.linspace(30,30,1000)
+y7=np.linspace(35,35,1000)
+y8=np.linspace(40,40,1000)
+y9=np.linspace(45,45,1000)
+y10=np.linspace(50,50,1000)
+average1=np.zeros((1000))
+average2=np.zeros((1000))
+average3=np.zeros((1000))
+average4=np.zeros((1000))
+average5=np.zeros((1000))
+average6=np.zeros((1000))
+average7=np.zeros((1000))
+average8=np.zeros((1000))
+average9=np.zeros((1000))
+average10=np.zeros((1000))
+for i in range(0,1000):
+    average1[i]=np.average(results[0:(i+1)])
+    average2[i]=np.average(results2[0:(i+1)])
+    average3[i]=np.average(results3[0:(i+1)])
+    average4[i]=np.average(results4[0:(i+1)])
+    average5[i]=np.average(results5[0:(i+1)])
+    average6[i]=np.average(results6[0:(i+1)])
+    average7[i]=np.average(results7[0:(i+1)])
+    average8[i]=np.average(results8[0:(i+1)])
+    average9[i]=np.average(results9[0:(i+1)])
+    average10[i]=np.average(results10[0:(i+1)])
+  
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots(figsize=(15, 20))
+ax.plot(x1, average1, label='n=10') 
+ax.plot(x1, average2, label='n=20')
+ax.plot(x1, average3, label='n=30') 
+ax.plot(x1, average4, label='n=40')
+ax.plot(x1, average5, label='n=50') 
+ax.plot(x1, average6, label='n=60')
+ax.plot(x1, average7, label='n=70') 
+ax.plot(x1, average8, label='n=80')
+ax.plot(x1, average9, label='n=90') 
+ax.plot(x1, average10, label='n=100')
+ax.plot(x1, y1,color='k',label="n/2")
+ax.plot(x1, y2,color='k')
+ax.plot(x1, y3,color='k')
+ax.plot(x1, y4,color='k')
+ax.plot(x1, y5,color='k')
+ax.plot(x1, y6,color='k')
+ax.plot(x1, y7,color='k')
+ax.plot(x1, y8,color='k')
+ax.plot(x1, y9,color='k')
+ax.plot(x1, y10,color='k')
+ax.set_xlabel('Number of experiments')  # Add an x-label to the axes.
+ax.set_ylabel('The averages')  # Add a y-label to the axes.
+ax.set_title("The behaviour of averages for different n")  # Add a title to the axes.
+ax.legend()
+plt.show()
+
+def draw_behaviour(k,x,average):
+    
+    fig, ax = plt.subplots(figsize=(15, 10))
+    ax.plot(x, average, label='n=%s'%k) 
+    ax.set_ylim(k/2-0.5,k/2+0.5)
+    ax.set_xlabel('Number of experiments')  # Add an x-label to the axes.
+    ax.set_ylabel('The averages')  # Add a y-label to the axes.
+    ax.set_title("The behaviour of averages for n=%s"%k)  # Add a title to the axes.
+    ax.legend()
+    plt.show()
+
+draw_behaviour(10,x,average_1)
+draw_behaviour(20,x,average_2)
+draw_behaviour(30,x,average_3)
+draw_behaviour(40,x,average_4)
+draw_behaviour(50,x,average_5)
+draw_behaviour(60,x1,average6)
+draw_behaviour(70,x1,average7)
+draw_behaviour(80,x1,average8)
+draw_behaviour(90,x1,average9)
+draw_behaviour(100,x1,average10)
+
+
+x2=np.linspace(2,5000,4999)
+x3=np.linspace(2,1000,999)
+
+compare_1=np.zeros((4999))
+compare_2=np.zeros((4999))
+compare_3=np.zeros((4999))
+compare_4=np.zeros((4999))
+compare_5=np.zeros((4999))
+compare_6=np.zeros((999))
+compare_7=np.zeros((999))
+compare_8=np.zeros((999))
+compare_9=np.zeros((999))
+compare_10=np.zeros((999))
+
+for i in range(0,4999):
+    compare_1[i]=(np.average(results[0:i+2])-np.average(results[0:i+1]))
+    compare_2[i]=(np.average(results2[0:i+2])-np.average(results2[0:i+1]))
+    compare_3[i]=(np.average(results3[0:i+2])-np.average(results3[0:i+1])) 
+    compare_4[i]=(np.average(results4[0:i+2])-np.average(results4[0:i+1])) 
+    compare_5[i]=(np.average(results5[0:i+2])-np.average(results5[0:i+1]))
+for i in range(0,999):
+    compare_6[i]=(np.average(results6[0:i+2])-np.average(results6[0:i+1]))
+    compare_7[i]=(np.average(results7[0:i+2])-np.average(results7[0:i+1]))
+    compare_8[i]=(np.average(results8[0:i+2])-np.average(results8[0:i+1]))
+    compare_9[i]=(np.average(results9[0:i+2])-np.average(results9[0:i+1]))
+    compare_10[i]=(np.average(results10[0:i+2])-np.average(results10[0:i+1]))
+
+def draw_change(k,x,compare): 
+    fig,ax= plt.subplots(figsize=(30,20))
+    ax.fill_between(x, 0.01,-0.01, label='threshold1=0.01',alpha=0.2)
+    ax.fill_between(x, 0.001,-0.001, label='threshold2=0.001',alpha=0.2) 
+    ax.plot(x, compare, label='n=%s'%k) 
+    ax.set_ylim(-0.1,0.1)
+    ax.set_xlabel('Number of experiments')  # Add an x-label to the axes.
+    ax.set_ylabel('The difference of averages')  # Add a y-label to the axes.
+    ax.set_title("The difference of averages for n=%s"%k)  # Add a title to the axes.
+    ax.legend(fontsize=20,borderpad=3)
+    plt.show()
+
+def draw_detchange(k,x,compare): 
+    fig,ax= plt.subplots(figsize=(30,20))   
+    ax.fill_between(x, 0.01,-0.01, label='threshold1=0.01',alpha=0.2)
+    ax.fill_between(x, 0.001,-0.001, label='threshold2=0.001',alpha=0.2) 
+    ax.plot(x, compare, label='n=%s'%k) 
+    ax.set_ylim(-0.01,0.01)
+    ax.set_xlabel('Number of experiments')  # Add an x-label to the axes.
+    ax.set_ylabel('The difference of averages')  # Add a y-label to the axes.
+    ax.set_title("The difference of averages for n=%s"%k)  # Add a title to the axes.
+    ax.legend(loc='upper right',fontsize=20,borderpad=3)
+    plt.show()
+
+draw_change(10,x2,compare_1)
+draw_change(20,x2,compare_2)
+draw_change(30,x2,compare_3)
+draw_change(40,x2,compare_4)
+draw_change(50,x2,compare_5)
+draw_change(60,x3,compare_6)
+draw_change(70,x3,compare_7)
+draw_change(80,x3,compare_8)
+draw_change(90,x3,compare_9)
+draw_change(100,x3,compare_10)
+
+draw_detchange(10,x2,compare_1)
+draw_detchange(20,x2,compare_2)
+draw_detchange(30,x2,compare_3)
+draw_detchange(40,x2,compare_4)
+draw_detchange(50,x2,compare_5)
+draw_detchange(60,x3,compare_6)
+draw_detchange(70,x3,compare_7)
+draw_detchange(80,x3,compare_8)
+draw_detchange(90,x3,compare_9)
+draw_detchange(100,x3,compare_10)
+
+def stabilzation_point(x,threshold):
+    for i in range(0,x.shape[0]):
+        xj=x[range(i,x.shape[0])]
+        if (xj<=threshold).all():
+            return i+1
+    return None
+    
+stab_mat=np.ndarray((2,5))
+stab_mat2=np.ndarray((2,10))
+stab_mat[0,0]=stabilzation_point(compare_1,0.01)
+stab_mat[1,0]=stabilzation_point(compare_1,0.001)
+stab_mat[0,1]=stabilzation_point(compare_2,0.01)
+stab_mat[1,1]=stabilzation_point(compare_2,0.001)
+stab_mat[0,2]=stabilzation_point(compare_3,0.01)
+stab_mat[1,2]=stabilzation_point(compare_3,0.001)
+stab_mat[0,3]=stabilzation_point(compare_4,0.01)
+stab_mat[1,3]=stabilzation_point(compare_4,0.001)
+stab_mat[0,4]=stabilzation_point(compare_5,0.01)
+stab_mat[1,4]=stabilzation_point(compare_5,0.001)
+
+
+
+stab_mat2[0,0]=stabilzation_point(compare_1[0:1000],0.01)
+stab_mat2[1,0]=stabilzation_point(compare_1[0:1000],0.001)
+stab_mat2[0,1]=stabilzation_point(compare_2[0:1000],0.01)
+stab_mat2[1,1]=stabilzation_point(compare_2[0:1000],0.001)
+stab_mat2[0,2]=stabilzation_point(compare_3[0:1000],0.01)
+stab_mat2[1,2]=stabilzation_point(compare_3[0:1000],0.001)
+stab_mat2[0,3]=stabilzation_point(compare_4[0:1000],0.01)
+stab_mat2[1,3]=stabilzation_point(compare_4[0:1000],0.001)
+stab_mat2[0,4]=stabilzation_point(compare_5[0:1000],0.01)
+stab_mat2[1,4]=stabilzation_point(compare_5[0:1000],0.001)
+
+
+
+stab_mat2[0,5]=stabilzation_point(compare_6,0.01)
+stab_mat2[1,5]=stabilzation_point(compare_6,0.001)
+stab_mat2[0,6]=stabilzation_point(compare_7,0.01)
+stab_mat2[1,6]=stabilzation_point(compare_7,0.001)
+stab_mat2[0,7]=stabilzation_point(compare_8,0.01)
+stab_mat2[1,7]=stabilzation_point(compare_8,0.001)
+stab_mat2[0,8]=stabilzation_point(compare_9,0.01)
+stab_mat2[1,8]=stabilzation_point(compare_9,0.001)
+stab_mat2[0,9]=stabilzation_point(compare_10,0.01)
+stab_mat2[1,9]=stabilzation_point(compare_10,0.001)
+
+print(stab_mat)
+print(stab_mat2)
+
+def draw_distribution(k,x):
+    x=np.asarray(x)
+    n=(x.max()-x.min())
+    fig,ax= plt.subplots(figsize=(30,20))   
+    ax.hist(x, bins=n) 
+    ax.set_xlabel('Number of iterations')  # Add an x-label to the axes.
+    ax.set_ylabel('The frequency')  # Add a y-label to the axes.
+    ax.set_title("The distribution of iterations for n=%s"%k)  # Add a title to the axes.
+    plt.show()
+
+draw_distribution(10,results)
+draw_distribution(20,results2)
+draw_distribution(30,results3)
+draw_distribution(40,results4)
+draw_distribution(50,results5)
+draw_distribution(60,results6)
+draw_distribution(70,results7)
+draw_distribution(80,results8)
+draw_distribution(90,results9)
+draw_distribution(100,results10)
+
+
+import numpy as np
+avg_ite=[]
+avg_ite.append(np.average(results[0:5000]))
+avg_ite.append(np.average(results2[0:5000]))
+avg_ite.append(np.average(results3[0:5000]))
+avg_ite.append(np.average(results4[0:5000])) 
+avg_ite.append(np.average(results5[0:5000]))
+avg_ite.append(np.average(results6[0:1000]))
+avg_ite.append(np.average(results7[0:1000]))
+avg_ite.append(np.average(results8[0:1000]))
+avg_ite.append(np.average(results9[0:1000]))
+avg_ite.append(np.average(results10[0:1000])) 
+n1=np.array([10,20,30,40,50,60,70,80,90,100])
+
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots(figsize=(14, 12))
+ax.set_xlabel('The dimension of the LP problem') 
+ax.set_ylabel('Average iterations')
+ax.set_title('Average iterations for different n')
+ax.plot(n1,avg_ite,color='b',marker='o',label='Average iterations')
+ax.plot(n1,n1/2, color='r',label='Lower bound: n/2')
+ax.legend()
+fig.tight_layout()  
+plt.show()
