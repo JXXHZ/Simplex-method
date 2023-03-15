@@ -29,7 +29,7 @@ def km_experiment(n,k):
     
 import time
 total_time=[]
-cost_ite=[]
+cost_ite1=[]
 
 total_ite=0
 results2=[]
@@ -39,7 +39,7 @@ for i in range(1,5001):
     total_ite=total_ite+km_experiment(2,i)
 t1 = time.time() - t0
 total_time.append(t1)
-cost_ite.append(t1/total_ite)
+cost_ite1.append(t1/total_ite)
 
 #Code for all n similar as above
 
@@ -50,7 +50,7 @@ fig, ax = plt.subplots(figsize=(14, 8))
 ax.set_xlabel('The dimension of the LP problem') 
 ax.set_ylabel('Average cost of iterations')
 ax.set_title('Average cost of iterations for different n')
-ax.plot(n1,cost_ite,color='b',marker='o')
+ax.plot(n1,cost_ite1,color='b',marker='o')
 fig.tight_layout()  
 plt.show()
 
