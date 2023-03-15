@@ -1,0 +1,205 @@
+from sympy import *
+import numpy as np
+import pprint
+def chooseEnteringindex(d,degen,N):
+    if (degen == 1):
+        p=np.argmin(d)
+        for i in range(0,d.shape[1]):
+            if (d[0,i] < -10**(-8) and N[i]<N[p]):
+                #print('This is a degenerate vertex!')
+                p=i
+        return p                          #Degeneracy: Bland's rule
+            
+    else:
+        return np.argmin(d) 
+    
+def chooseLeavingindex(beta,alpha,B):
+    ratio=[]
+    valid_index=[]
+    for i in range(0,alpha.shape[0]):
+        if (alpha[i]>10**(-8)):
+            valid_index.append(i)
+            ratio.append(beta[i,0]/alpha[i])
+
+    #if more than one achieves minimum then we should choose the smallest index 
+    p=np.argmin(ratio)
+    for i in range(0,len(ratio)):
+        if (ratio[i]==ratio[p] and B[valid_index[i]]<B[valid_index[p]]):
+            p=i
+
+    return valid_index[p]
+
+def generate(alpha,p):
+    n=np.zeros((alpha.shape[0],1))
+    for i in range(0,n.shape[0]):
+        n[i,0]=-alpha[i]/alpha[p]
+    n[p,0]=1/alpha[p]
+    E=np.zeros((alpha.shape[0],alpha.shape[0]))
+    for i in range(0,n.shape[0]):
+        E[i,i]=1
+        E[i,p]=n[i,0]
+    return E
+
+def Iteration_Experiment(c,A,b,B,N):
+    
+    threshold=10**(-8)
+    b1=b.shape[0]
+    c1=c.shape[0]
+    if (c1!=A.shape[1] or b1!=A.shape[0]):
+        print('A,b,c size not match')
+        return None
+    
+    if(B.shape[0]+N.shape[0]!=A.shape[1] or B.shape[0]!=b1):
+        print('number of B,N not match')
+        return None
+    
+    if((B<1).any()or (N<1).any()):
+        print('B,N number too small')
+        return None
+        
+    if((B>A.shape[1]).any() or (N>A.shape[1]).any()):
+        print('B,N number too large')
+        return None
+    
+    if((len(B)!=len(set(B)))or (len(N)!=len(set(N)))):
+        print('repeated element')
+        return None     
+    
+    BN=np.hstack((B,N))
+    if((len(BN)!=len(set(BN)))):
+        print('repeated element')
+        return None
+    
+    
+    Ab= np.zeros((B.shape[0],B.shape[0]))
+    count=0
+    for i in B-1:
+        for j in range(0,B.shape[0]):
+            Ab[j,count]=A[j,i]
+        count+=1    
+    #print("Ab= ",Ab)
+    
+    if(abs(np.linalg.det(Ab))<=threshold):
+        print('Ab singular')
+        return None
+    
+    An= np.zeros((B.shape[0],N.shape[0]))
+    count=0
+    for i in N-1:
+        for j in range(0,B.shape[0]):
+            An[j,count]=A[j,i]
+        count+=1    
+    #print("An=" ,An)
+    
+    C=np.linalg.inv(Ab)
+    #print("Ab^-1= ",C)
+    
+    D=np.matmul(C,b)
+    degen=0    
+    beta=np.zeros((D.shape[1],D.shape[0]))
+    for i in range(0,D.shape[0]):
+        beta[0,i]=D[i,0]    
+    #print("beta= ",beta)
+    if(abs(beta)<=threshold).any():
+        degen=1 
+    if (beta<-threshold).any():
+        print('basic variables less than 0')
+        return None
+    D1=beta.T
+
+    
+    dicounter = 2
+    
+    
+    Cb= np.zeros((1,B.shape[0]))
+    count=0
+    for i in B-1:
+        Cb[0,count]=c[i,0] 
+        count+=1
+    #print("Cb=",Cb)
+    
+    Cn= np.zeros((1,N.shape[0]))
+    count=0
+    for i in N-1:
+        Cn[0,count]=c[i,0]
+        count+=1
+    #print("Cn=",Cn)    
+    
+    pi=np.matmul(Cb,C)
+    #print("pi=",pi)
+    
+    d=Cn-np.matmul(pi,An)
+    #print("d=",d)
+    if ((d>=-threshold).all()): 
+        return dicounter-2
+    
+    while((d<-threshold).any()):
+        q=chooseEnteringindex(d,degen,N)
+        #print("q=",q)
+
+        alpha=np.matmul(C,A[:,N[q]-1])
+        #print("alpha=",alpha)
+        if (alpha<=threshold).all(): 
+            print("unbounded")
+            return None
+        #alpha1=np.zeros((alpha.shape[0],1))
+        #for i in range(0,alpha.shape[0]):
+        #    alpha1[i,0]=alpha[i]
+        #    if abs(alpha[i])<=threshold:
+        #        alpha1[i,0]=10**(-2)
+        #ratio=D1/alpha1
+        #print("ratio=",ratio)
+        p=chooseLeavingindex(D1,alpha,B)
+        #print("p=",p)
+    
+        E=generate(alpha,p)
+        #print("E=",E)
+        C=np.matmul(E,C)
+        #print("Ab^-1=",C)
+    
+        t = 0
+        t=N[q]
+        N[q]=B[p]
+        B[p]=t
+        #B.sort()
+        #N.sort()
+        #print("B=",B)
+        #print("N=",N)
+        dicounter+=1
+        
+        
+        for i in range(0,B.shape[0]):
+            An[i,q]=A[i,N[q]-1]
+        #print("An=" ,An)
+    
+        degen=0
+        D=np.matmul(C,b)
+        for i in range(0,D.shape[0]):
+            beta[0,i]=D[i,0]    
+        #print("beta=",beta)
+        if(abs(beta)<= threshold).any():
+            degen=1
+        D1=beta.T
+        #print("D1",D1)
+        
+        #if(D.T== 0).any():
+        #    degen=1
+        #D1=(D.T).T
+        #print("D1",D1)
+        
+
+        Cb[0,p]=c[B[p]-1,0]
+        #print("Cb=",Cb)
+    
+        Cn[0,q]=c[N[q]-1,0]
+        #print("Cn=",Cn) 
+        
+        pi=np.matmul(Cb,C)
+        #print("pi=",pi)
+        
+        d=Cn-np.matmul(pi,An)
+        #print("d=",d)
+        if ((d>=-threshold).all()):         
+            return dicounter-2
+        
+    return dicounter-2
