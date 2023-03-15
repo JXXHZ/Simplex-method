@@ -40,7 +40,7 @@ cost_ite.append(t1/total_ite)
 #total_time.append(t1)
 #cost_ite.append(t1/total_ite)
 
-#Similar code for all n as above
+#Code for all n similar as above
 
 n1=np.array([10,20,30,40,50,60,70,80,90,100])
 import matplotlib.pyplot as plt
