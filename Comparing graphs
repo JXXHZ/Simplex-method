@@ -1,0 +1,23 @@
+fig, ax = plt.subplots(figsize=(14, 8))
+ax.set_xlabel('The dimension of the LP problem') 
+ax.set_ylabel('Average iterations')
+ax.set_title('Average iterations for different n')
+ax.plot(x, y, 'ro') 
+ax.plot(x_data, y_data,color='r',label='KM_cube')
+ax.plot(n1,avg_ite2,color='b',marker='o',label='regular cube')
+ax.legend()
+fig.tight_layout()  
+plt.show()
+
+import numpy as np
+n1=np.array([2,3,4,5,6,7,8,9,10])
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots(figsize=(14, 8))
+ax.set_xlabel('The dimension of the LP problem') 
+ax.set_ylabel('Average cost of iterations')
+ax.set_title('Average cost of iterations for different n')
+ax.plot(n1,cost_ite1,color='r',marker='o',label='KM_cube')
+ax.plot(n1,cost_ite,color='b',marker='o',label='regular cube')
+ax.legend()
+fig.tight_layout()  
+plt.show()
