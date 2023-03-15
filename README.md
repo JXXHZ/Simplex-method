@@ -1,2 +1,2 @@
 # Simplex-method
-The code of the paper "How Good is the Simplex Method?"
+The Python code of the paper "How Good is the Simplex Method?"
